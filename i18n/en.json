@@ -97,7 +97,7 @@
   "pdf_done": "Diagnosis performed by Visual TEAF",
   "pdf_header": "PATIENT DIAGNOSIS",
   "incomplete": "Incomplete",
-  "explanation": "Orange = index of FASD",
+  "explanation": "Orange = FASD indicator",
   "introduce": "Enter a name",
   "na": "N/A",
   "guide": "User Guide",
