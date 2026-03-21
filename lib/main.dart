@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               DiagnosticoHelper diagnosticohelper = DiagnosticoHelper();
               diagnosticohelper.loadData();
             });
-            return child!;
+            return child ?? const SizedBox.shrink();
           },
         );
       }),

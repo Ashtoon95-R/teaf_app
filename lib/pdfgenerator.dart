@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -93,12 +94,16 @@ class PdfGenerator {
 
   static Future<void> _saveAndSharePdf(pw.Document pdf) async {
     try {
-      final output = await getTemporaryDirectory();
-      final file = File("${output.path}/diagnostico.pdf");
-      await file.writeAsBytes(await pdf.save());
-
+      final bytes = await pdf.save();
+      
+      if (!kIsWeb) {
+        final output = await getTemporaryDirectory();
+        final file = File("${output.path}/diagnostico.pdf");
+        await file.writeAsBytes(bytes);
+      }
+      
       await Printing.sharePdf(
-        bytes: await pdf.save(),
+        bytes: bytes,
         filename: 'diagnostico.pdf',
       );
     } catch (e) {

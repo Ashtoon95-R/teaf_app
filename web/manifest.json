@@ -1,11 +1,11 @@
 {
-    "name": "teaf_app",
-    "short_name": "teaf_app",
+    "name": "VisualTEAF",
+    "short_name": "TeafAPP",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Herramienta de apoyo al diagnóstico VisualTEAF.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
