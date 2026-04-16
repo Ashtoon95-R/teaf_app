@@ -6,7 +6,7 @@
 #   3) APK split: Solo para casos especificos (CI, builds por ABI). CUIDADO: cada APK solo funciona
 #      en su arquitectura. Nunca distribuyas un solo archivo a todos los usuarios.
 #
-# Uso (desde build_store o desde la raiz del proyecto; el script localiza pubspec.yaml):
+# Uso:
 #   .\build_android.ps1                                    # Lee version de pubspec.yaml, pregunta tipo de build
 #   .\build_android.ps1 -BuildName "2.0.9" -BuildNumber 22 # Version personalizada
 #   .\build_android.ps1 -BuildType 1                      # AAB directo (sin preguntar), para CI
@@ -22,22 +22,6 @@ param(
 
 # Salir si hay algun error
 $ErrorActionPreference = "Stop"
-
-# Ubicacion del script (PowerShell 2+: fallback si PSScriptRoot vacio)
-if (-not $PSScriptRoot) {
-    $PSScriptRoot = Split-Path -Parent -LiteralPath $MyInvocation.MyCommand.Path
-}
-
-# Raiz del proyecto Flutter: subir desde build_store hasta encontrar pubspec.yaml
-$ProjectRoot = $PSScriptRoot
-while ($ProjectRoot -and -not (Test-Path (Join-Path $ProjectRoot "pubspec.yaml"))) {
-    $parent = Split-Path -Parent $ProjectRoot
-    if (-not $parent -or $parent -eq $ProjectRoot) {
-        $ProjectRoot = $null
-        break
-    }
-    $ProjectRoot = $parent
-}
 
 # Verifica que un APK contiene libflutter.so (evita MissingLibraryException)
 function Test-ApkContainsLibFlutter {
@@ -57,73 +41,22 @@ function Test-ApkContainsLibFlutter {
     }
 }
 
+# Asegurar que estamos en el directorio del script (epco_flutter)
+$projectRoot = $PSScriptRoot
+if (-not [string]::IsNullOrEmpty($projectRoot)) {
+    Set-Location -LiteralPath $projectRoot
+}
+
 Write-Host ""
-Write-Host "Iniciando build de Android para Teaf App" -ForegroundColor Cyan
+Write-Host "Iniciando build de Android para EPCO" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "Directorio actual: $(Get-Location)" -ForegroundColor DarkGray
 Write-Host ""
 
-if (-not $ProjectRoot -or -not (Test-Path (Join-Path $ProjectRoot "pubspec.yaml"))) {
-    Write-Host "Error: No se encontro pubspec.yaml (buscando desde el directorio del script)." -ForegroundColor Red
+# Verificar que estamos en el directorio correcto
+if (-not (Test-Path "pubspec.yaml")) {
+    Write-Host "Error: No se encontro pubspec.yaml. Asegurate de estar en el directorio del proyecto Flutter." -ForegroundColor Red
     exit 1
-}
-Set-Location -LiteralPath $ProjectRoot
-Write-Host "Proyecto Flutter: $ProjectRoot" -ForegroundColor Gray
-Write-Host ""
-
-# Windows sin Modo desarrollador: Flutter no puede crear symlinks de plugins de escritorio (windows/linux).
-$script:TeafHiddenWindows = $false
-$script:TeafHiddenLinux = $false
-
-function Restore-TeafDesktopPlatformFolders {
-    $root = (Get-Location).Path
-    $w = Join-Path $root ".__teaf_build_hidden_windows"
-    $l = Join-Path $root ".__teaf_build_hidden_linux"
-    if ($script:TeafHiddenWindows -and (Test-Path -LiteralPath $w)) {
-        Rename-Item -LiteralPath $w -NewName "windows" -ErrorAction SilentlyContinue
-        $script:TeafHiddenWindows = $false
-    }
-    if ($script:TeafHiddenLinux -and (Test-Path -LiteralPath $l)) {
-        Rename-Item -LiteralPath $l -NewName "linux" -ErrorAction SilentlyContinue
-        $script:TeafHiddenLinux = $false
-    }
-}
-
-function Test-TeafWindowsSymlinkAvailable {
-    $t = Join-Path $env:TEMP "teaf_symlink_test_$(Get-Random)"
-    try {
-        New-Item -ItemType SymbolicLink -Path $t -Target $env:USERPROFILE -ErrorAction Stop | Out-Null
-        return $true
-    } catch {
-        return $false
-    } finally {
-        if (Test-Path -LiteralPath $t) { Remove-Item -LiteralPath $t -Force -ErrorAction SilentlyContinue }
-    }
-}
-
-function Invoke-BuildExit {
-    param([int]$Code = 0)
-    Restore-TeafDesktopPlatformFolders
-    exit $Code
-}
-
-if ($env:OS -eq 'Windows_NT') {
-    if (-not (Test-TeafWindowsSymlinkAvailable)) {
-        $here = (Get-Location).Path
-        $winDir = Join-Path $here "windows"
-        $linDir = Join-Path $here "linux"
-        if (Test-Path -LiteralPath $winDir) {
-            Rename-Item -LiteralPath $winDir -NewName ".__teaf_build_hidden_windows"
-            $script:TeafHiddenWindows = $true
-        }
-        if (Test-Path -LiteralPath $linDir) {
-            Rename-Item -LiteralPath $linDir -NewName ".__teaf_build_hidden_linux"
-            $script:TeafHiddenLinux = $true
-        }
-        if ($script:TeafHiddenWindows -or $script:TeafHiddenLinux) {
-            Write-Host "Nota: sin permisos para symlinks (activa Modo desarrollador en Windows para evitar esto). Ocultando temporalmente windows/ y linux/ solo durante el build." -ForegroundColor Yellow
-            Write-Host ""
-        }
-    }
 }
 
 # Verificar Flutter
@@ -154,7 +87,7 @@ if (-not $flutterCmd) {
         Write-Host "Flutter encontrado en PATH" -ForegroundColor Green
     } catch {
         Write-Host "Error: Flutter no esta instalado o no esta en el PATH" -ForegroundColor Red
-        Invoke-BuildExit 1
+        exit 1
     }
 }
 
@@ -177,7 +110,7 @@ if ([string]::IsNullOrEmpty($BuildName) -or [string]::IsNullOrEmpty($BuildNumber
         Write-Host "Version de la App: $appVersion (Build $buildNum)" -ForegroundColor Green
     } else {
         Write-Host "Error: No se pudo leer la version del pubspec.yaml" -ForegroundColor Red
-        Invoke-BuildExit 1
+        exit 1
     }
 } else {
     Write-Host "Usando version personalizada: $appVersion (Build $buildNum)" -ForegroundColor Cyan
@@ -189,7 +122,7 @@ Write-Host "Limpiando proyecto..." -ForegroundColor Yellow
 & $flutterCmd clean
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error durante la limpieza del proyecto" -ForegroundColor Red
-    Invoke-BuildExit 1
+    exit 1
 }
 Write-Host "Limpieza completada" -ForegroundColor Green
 Write-Host ""
@@ -199,7 +132,7 @@ Write-Host "Obteniendo dependencias de Flutter..." -ForegroundColor Yellow
 & $flutterCmd pub get
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error al obtener dependencias" -ForegroundColor Red
-    Invoke-BuildExit 1
+    exit 1
 }
 Write-Host "Dependencias obtenidas" -ForegroundColor Green
 Write-Host ""
@@ -216,17 +149,35 @@ if ($doctorOutput -match "Android license status unknown" -or $doctorOutput -mat
     Write-Host ""
     if ($BuildType -eq 0) {
         $confirm = Read-Host "¿Deseas intentar continuar de todos modos? (s/n)"
-        if ($confirm -ne "s") { Invoke-BuildExit 1 }
+        if ($confirm -ne "s") { exit 1 }
     }
 }
 Write-Host ""
 
-# Verificar que existe key.properties
-if (-not (Test-Path "android/key.properties")) {
-    Write-Host "ERROR: No hay android/key.properties - el build release fallara (Google Play exige firma de publicacion)." -ForegroundColor Red
-    Write-Host "  1. Copia android/key.properties.example a android/key.properties" -ForegroundColor Yellow
-    Write-Host "  2. Genera upload-keystore.jks (keytool) y colocalo en android/" -ForegroundColor Yellow
-    Write-Host "  3. Solo para pruebas locales sin keystore: descomenta teaf.allow.debug.signing.release en android/gradle.properties" -ForegroundColor Gray
+# Verificar que existe key.properties y el keystore
+if (Test-Path "android\key.properties") {
+    Write-Host "Verificando configuracion de firma (key.properties)..." -ForegroundColor Yellow
+    try {
+        $keyProps = ConvertFrom-StringData (Get-Content "android\key.properties" -Raw)
+        $storeFile = $keyProps.storeFile
+        if ($storeFile) {
+            # La ruta en key.properties es relativa a la carpeta 'android'
+            $absStorePath = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine((Join-Path (Get-Location) "android"), $storeFile))
+            if (Test-Path $absStorePath) {
+                Write-Host "Keystore encontrado: $absStorePath" -ForegroundColor Green
+            } else {
+                Write-Host "ERROR: No se encontro el archivo keystore en: $absStorePath" -ForegroundColor Red
+                Write-Host "Verifica la ruta 'storeFile' en android\key.properties" -ForegroundColor Red
+                Write-Host ""
+                exit 1
+            }
+        }
+    } catch {
+        Write-Host "Nota: No se pudo validar el archivo keystore automaticamente, continuando..." -ForegroundColor Gray
+    }
+} else {
+    Write-Host "Advertencia: No se encontro android\key.properties" -ForegroundColor Yellow
+    Write-Host "El build no estara firmado para produccion" -ForegroundColor Yellow
     Write-Host ""
 }
 
@@ -253,7 +204,7 @@ switch ($buildType) {
         if ($LASTEXITCODE -ne 0) {
             Write-Host ""
             Write-Host "Error al construir el App Bundle" -ForegroundColor Red
-            Invoke-BuildExit 1
+            exit 1
         }
         
         $aabPath = "build\app\outputs\bundle\release\app-release.aab"
@@ -289,7 +240,7 @@ switch ($buildType) {
             Write-Host "  4. Crea una nueva version y sube el archivo AAB" -ForegroundColor White
         } else {
             Write-Host "Error: No se encontro el archivo AAB en $aabPath" -ForegroundColor Red
-            Invoke-BuildExit 1
+            exit 1
         }
     }
     "2" {
@@ -300,7 +251,7 @@ switch ($buildType) {
         if ($LASTEXITCODE -ne 0) {
             Write-Host ""
             Write-Host "Error al construir el APK" -ForegroundColor Red
-            Invoke-BuildExit 1
+            exit 1
         }
         
         $apkPath = "build\app\outputs\flutter-apk\app-release.apk"
@@ -324,7 +275,7 @@ switch ($buildType) {
             Write-Host "APK listo para pruebas e instalacion directa" -ForegroundColor Yellow
         } else {
             Write-Host "Error: No se encontro el archivo APK en $apkPath" -ForegroundColor Red
-            Invoke-BuildExit 1
+            exit 1
         }
     }
     "3" {
@@ -335,7 +286,7 @@ switch ($buildType) {
         if ($LASTEXITCODE -ne 0) {
             Write-Host ""
             Write-Host "Error al construir los APKs" -ForegroundColor Red
-            Invoke-BuildExit 1
+            exit 1
         }
         
         $apkDir = "build\app\outputs\flutter-apk"
@@ -372,12 +323,12 @@ switch ($buildType) {
             }
         } else {
             Write-Host "Error: No se encontraron archivos APK en $apkDir" -ForegroundColor Red
-            Invoke-BuildExit 1
+            exit 1
         }
     }
     default {
         Write-Host "Opcion invalida" -ForegroundColor Red
-        Invoke-BuildExit 1
+        exit 1
     }
 }
 
@@ -388,4 +339,3 @@ Write-Host "Informacion de la version:" -ForegroundColor Yellow
 Write-Host "  Version: $appVersion" -ForegroundColor White
 Write-Host "  Build: $buildNum" -ForegroundColor White
 Write-Host ""
-Restore-TeafDesktopPlatformFolders

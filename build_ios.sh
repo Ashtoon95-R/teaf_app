@@ -1,23 +1,11 @@
 #!/bin/bash
 
 # Script para construir la app iOS en macOS
-# Uso (desde build_store o desde la raiz del proyecto; el script localiza pubspec.yaml):
+# Uso: 
 #   ./build_ios.sh                                      # Lee version de pubspec.yaml
 #   ./build_ios.sh --build-name 2.0.8 --build-number 22  # Version personalizada
 
 set -e  # Salir si hay algún error
-
-# Directorio del script y raiz del proyecto Flutter (donde esta pubspec.yaml)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$SCRIPT_DIR"
-while [ ! -f "$PROJECT_ROOT/pubspec.yaml" ] && [ -n "$PROJECT_ROOT" ]; do
-    PARENT="$(dirname "$PROJECT_ROOT")"
-    if [ "$PARENT" = "$PROJECT_ROOT" ]; then
-        PROJECT_ROOT=""
-        break
-    fi
-    PROJECT_ROOT="$PARENT"
-done
 
 # Parametros opcionales
 CUSTOM_BUILD_NAME=""
@@ -42,7 +30,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "Iniciando build de iOS para Teaf App"
+echo "Iniciando build de iOS para EPCO"
 echo "===================================="
 echo ""
 
@@ -53,14 +41,11 @@ RED='\033[0;31m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Ir a la raiz del proyecto Flutter
-if [ -z "$PROJECT_ROOT" ] || [ ! -f "$PROJECT_ROOT/pubspec.yaml" ]; then
-    echo -e "${RED}Error: No se encontro pubspec.yaml (buscando desde el directorio del script).${NC}"
+# Verificar que estamos en el directorio correcto
+if [ ! -f "pubspec.yaml" ]; then
+    echo -e "${RED}Error: No se encontro pubspec.yaml. Asegurate de estar en el directorio del proyecto Flutter.${NC}"
     exit 1
 fi
-cd "$PROJECT_ROOT"
-echo -e "${CYAN}Proyecto Flutter: $PROJECT_ROOT${NC}"
-echo ""
 
 # Verificar Flutter
 echo -e "${YELLOW}Verificando Flutter...${NC}"

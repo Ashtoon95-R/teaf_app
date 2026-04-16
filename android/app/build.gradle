@@ -23,6 +23,18 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+def hasReleaseKeystore = false
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+    hasReleaseKeystore = keystoreProperties.getProperty('storeFile') != null
+}
+
+// Solo para pruebas locales SIN keystore. NUNCA subas a Play un AAB/APK generado asi.
+def allowDebugSigningRelease = project.findProperty('teaf.allow.debug.signing.release') == 'true'
 
 android {
     namespace "com.teaf_app"
@@ -57,24 +69,29 @@ defaultConfig {
 
     signingConfigs {
         release {
-            def keyProperties = new Properties()
-            def keyPropertiesFile = rootProject.file('key.properties')
-            if (keyPropertiesFile.exists()) {
-                keyPropertiesFile.withReader('UTF-8') { reader ->
-                    keyProperties.load(reader)
-                }
+            if (hasReleaseKeystore) {
+                storeFile = rootProject.file(keystoreProperties.getProperty('storeFile'))
+                storePassword = keystoreProperties.getProperty('storePassword')
+                keyAlias = keystoreProperties.getProperty('keyAlias')
+                keyPassword = keystoreProperties.getProperty('keyPassword')
             }
-
-            storeFile = keyProperties.getProperty('storeFile') ? file(keyProperties.getProperty('storeFile')) : null
-            storePassword = keyProperties.getProperty('storePassword')
-            keyAlias = keyProperties.getProperty('keyAlias')
-            keyPassword = keyProperties.getProperty('keyPassword')
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (hasReleaseKeystore) {
+                signingConfig signingConfigs.release
+            } else if (allowDebugSigningRelease) {
+                // Depuracion: firma debug (Google Play lo rechaza)
+                signingConfig signingConfigs.debug
+            } else {
+                throw new GradleException(
+                    "Falta firma de publicacion: crea android/key.properties a partir de key.properties.example " +
+                    "y coloca el .jks en android/. Para pruebas locales sin keystore, anade en gradle.properties " +
+                    "teaf.allow.debug.signing.release=true (no subas ese artefacto a Play)."
+                )
+            }
         }
     }
 }

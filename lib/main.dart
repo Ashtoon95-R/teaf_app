@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'welcome_ui.dart';
-import 'diagnostico_helper.dart';
 import 'app_language_provider.dart';
 import 'app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -28,12 +27,22 @@ class MyApp extends StatelessWidget {
       create: (BuildContext context) => appLanguage,
       child: Consumer<AppLanguageProvider>(builder: (context, model, child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'TeafAPP',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 53, 133, 182)),
             useMaterial3: true,
           ),
-          home: SafeArea(child: WelcomeUI()),
+          home: Builder(
+            builder: (context) {
+              if (AppLocalizations.of(context) == null) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+              return SafeArea(child: WelcomeUI());
+            },
+          ),
           locale: model.appLocal,
           supportedLocales: const [
             Locale('es', 'ES'),
@@ -45,13 +54,6 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate
           ],
-          builder: (context, child) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              DiagnosticoHelper diagnosticohelper = DiagnosticoHelper();
-              diagnosticohelper.loadData();
-            });
-            return child ?? const SizedBox.shrink();
-          },
         );
       }),
     );

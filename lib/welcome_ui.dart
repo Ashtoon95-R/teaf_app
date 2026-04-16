@@ -144,7 +144,3 @@ class _WelcomeUIState extends State<WelcomeUI> {
     );
   }
 }
-
-void main() => runApp(MaterialApp(
-      home: WelcomeUI(),
-    ));
