@@ -4,6 +4,7 @@ import 'package:teaf_app/patients_ui.dart';
 import 'welcome_ui.dart';
 import 'app_localizations.dart';
 import 'diagnostico_helper.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class PatientDetailsScreen extends StatelessWidget {
   final String patientName;
@@ -142,84 +143,71 @@ class PatientDetailsScreen extends StatelessWidget {
                           ),
                           Align(
                             alignment: Alignment.bottomCenter,
-                            child: SizedBox(
-                              width: 250,
-                              height: 60,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          AppLocalizations.of(context)!
-                                              .translate('delete')!,
-                                        ),
-                                        content: Text(
-                                          AppLocalizations.of(context)!
-                                              .translate('sure')!,
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // Cerrar el cuadro de diálogo
-                                            },
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .translate('cancel')!,
-                                            ),
+                            child: TeafActionButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        AppLocalizations.of(context)!
+                                            .translate('delete')!,
+                                      ),
+                                      content: Text(
+                                        AppLocalizations.of(context)!
+                                            .translate('sure')!,
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .translate('cancel')!,
                                           ),
-                                          TextButton(
-                                            onPressed: () {
-                                              _deletePatient(
-                                                  context, patientName);
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PatientUI(),
-                                                ),
-                                              );
-                                              // Puedes navegar a la pantalla de inicio o hacer cualquier otra acción necesaria después de resetear
-                                            },
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .translate('accept')!,
-                                            ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            _deletePatient(
+                                                context, patientName);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PatientUI(),
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .translate('accept')!,
                                           ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all(Color(
-                                      0xFF262f36)), // Color de fondo del botón
-                                  shape: WidgetStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          20.0), // Bordes redondeados
-                                      side: BorderSide(
-                                          color: Colors.white,
-                                          width:
-                                              2.0), // Borde blanco con ancho 2.0
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              label: AppLocalizations.of(context)!
+                                  .translate('delete')!,
+                              buttonStyle: ButtonStyle(
+                                backgroundColor:
+                                    WidgetStateProperty.all(Color(0xFF262f36)),
+                                shape: WidgetStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0,
                                     ),
                                   ),
                                 ),
-                                child: Text(
-                                  AppLocalizations.of(context)!
-                                      .translate('delete')!,
-                                  style: TextStyle(
-                                    color: Colors
-                                        .white, // Color del texto en el botón
-                                    fontSize:
-                                        18, // Tamaño de fuente del texto en el botón
-                                    fontWeight: FontWeight.bold, // Negrita
-                                  ),
-                                ),
                               ),
+                              textColor: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],

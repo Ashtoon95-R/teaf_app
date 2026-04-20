@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'diagnostico_helper.dart';
 import 'app_language_provider.dart';
 import 'app_localizations.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 // ignore: must_be_immutable
 class SolucionUI extends StatefulWidget {
@@ -275,150 +276,128 @@ class _SolucionUIState extends State<SolucionUI> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                width: 250,
-                height: 60,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Analisis1UI(),
-                      ),
-                    );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Color(0xFF262f36)),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.translate('edit')!,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 25,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 250,
-                height: 60,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Manejar la acción de Atrás
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ResumenUI(diagnosticoResult: diagnosticoResult),
-                      ),
-                    );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Color(0xFF262f36)),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.translate('summary')!,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 25,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 250,
-                height: 60,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(
-                            AppLocalizations.of(context)!
-                                .translate('back_to_home')!,
+              IntrinsicWidth(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TeafActionButton(
+                      matchGroupWidth: true,
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Analisis1UI(),
                           ),
-                          content: Text(
-                            AppLocalizations.of(context)!
-                                .translate('data_loss_confirmation')!,
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pop(); // Cerrar el cuadro de diálogo
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .translate('cancel')!,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                // Resetear los valores y cerrar el cuadro de diálogo
-                                DiagnosticoHelper.resetPreferences(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => InicioUI(),
-                                  ),
-                                );
-                                // Puedes navegar a la pantalla de inicio o hacer cualquier otra acción necesaria después de resetear
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .translate('accept')!,
-                              ),
-                            ),
-                          ],
                         );
                       },
-                    );
-                    // Manejar la acción de Atrás
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Color(0xFF262f36)),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(20.0),
+                      label: AppLocalizations.of(context)!.translate('edit')!,
+                      buttonStyle: ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.all(Color(0xFF262f36)),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white, width: 2.0),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.translate('home')!,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      textColor: Color.fromARGB(255, 255, 255, 255),
                       fontSize: 25,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
                     ),
-                  ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TeafActionButton(
+                      matchGroupWidth: true,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ResumenUI(diagnosticoResult: diagnosticoResult),
+                          ),
+                        );
+                      },
+                      label:
+                          AppLocalizations.of(context)!.translate('summary')!,
+                      buttonStyle: ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.all(Color(0xFF262f36)),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white, width: 2.0),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                      ),
+                      textColor: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 25,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TeafActionButton(
+                      matchGroupWidth: true,
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                AppLocalizations.of(context)!
+                                    .translate('back_to_home')!,
+                              ),
+                              content: Text(
+                                AppLocalizations.of(context)!
+                                    .translate('data_loss_confirmation')!,
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .translate('cancel')!,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    DiagnosticoHelper.resetPreferences(
+                                        context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => InicioUI(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .translate('accept')!,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      label: AppLocalizations.of(context)!.translate('home')!,
+                      buttonStyle: ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.all(Color(0xFF262f36)),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white, width: 2.0),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                      ),
+                      textColor: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 25,
+                    ),
+                  ],
                 ),
               ),
             ],

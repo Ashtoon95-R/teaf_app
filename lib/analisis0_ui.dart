@@ -6,6 +6,7 @@ import 'welcome_ui.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'app_localizations.dart';
 import 'diagnostico_helper.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class Analisis0UI extends StatefulWidget {
   @override
@@ -246,50 +247,40 @@ class _Analisis0UIState extends State<Analisis0UI> {
               SizedBox(height: 30),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: 250,
-                  height: 60,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (respuesta == null) {
-                        Fluttertoast.showToast(
-                          msg: AppLocalizations.of(context)!
-                              .translate('please')!,
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 2,
-                          backgroundColor: Color(0xFF262f36),
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                      } else if (respuesta == true) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Analisis2UI(),
-                          ),
-                        );
-                      } else {
-                        mostrarMensajeNoEvaluable(context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF262f36),
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.translate('next')!,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                      ),
+                child: TeafActionButton(
+                  onPressed: () {
+                    if (respuesta == null) {
+                      Fluttertoast.showToast(
+                        msg: AppLocalizations.of(context)!
+                            .translate('please')!,
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Color(0xFF262f36),
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    } else if (respuesta == true) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Analisis2UI(),
+                        ),
+                      );
+                    } else {
+                      mostrarMensajeNoEvaluable(context);
+                    }
+                  },
+                  label: AppLocalizations.of(context)!.translate('next')!,
+                  buttonStyle: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF262f36),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
+                  textColor: Colors.white,
+                  fontSize: 25,
                 ),
               ),
             ],

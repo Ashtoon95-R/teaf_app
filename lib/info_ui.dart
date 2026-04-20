@@ -4,6 +4,7 @@ import 'package:teaf_app/inicio_ui.dart';
 import 'welcome_ui.dart';
 import 'app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 Future<void> _launchURL(String url) async {
   Uri url0 = Uri.parse(url);
@@ -155,80 +156,75 @@ class InfoUI extends StatelessWidget {
               bottom: 20,
               left: 0,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 170,
-                    height: 60,
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Manejar la acción de Atrás
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WelcomeUI(),
+              child: LayoutBuilder(
+                builder: (context, _) {
+                  return Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TeafActionButton(
+                            applyScreenWidthConstraint: false,
+                            outerHorizontalMargin: 8,
+                            innerHorizontalPadding: 18,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => WelcomeUI(),
+                                ),
+                              );
+                            },
+                            label: AppLocalizations.of(context)!
+                                .translate('back')!,
+                            buttonStyle: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all(Color(0xFFDFDFDF)),
+                              shape: WidgetStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              ),
+                            ),
+                            textColor: Color(0xFF262f36),
+                            fontSize: 30,
                           ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(Color(0xFFDFDFDF)),
-                        shape:
-                            WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                          TeafActionButton(
+                            applyScreenWidthConstraint: false,
+                            outerHorizontalMargin: 8,
+                            innerHorizontalPadding: 18,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => InicioUI(),
+                                ),
+                              );
+                            },
+                            label: AppLocalizations.of(context)!
+                                .translate('next')!,
+                            buttonStyle: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all(Color(0xFFDFDFDF)),
+                              shape: WidgetStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              ),
+                            ),
+                            textColor: Color(0xFF262f36),
+                            fontSize: 27,
                           ),
-                        ),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.translate('back')!,
-                        style: TextStyle(
-                          color: Color(0xFF262f36),
-                          fontSize: 30,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 170,
-                    height: 60,
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Manejar la acción de Siguiente
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => InicioUI(),
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(Color(0xFFDFDFDF)),
-                        shape:
-                            WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.translate('next')!,
-                        style: TextStyle(
-                          color: Color(0xFF262f36),
-                          fontSize: 27,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                        ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ],

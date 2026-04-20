@@ -9,6 +9,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'app_language_provider.dart';
 import 'app_localizations.dart';
 import 'diagnostico_helper.dart';
+import 'package:teaf_app/teaf_field_styles.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class Analisis1UI extends StatefulWidget {
   @override
@@ -203,17 +205,14 @@ class _Analisis1UIState extends State<Analisis1UI> {
                               children: [
                                 Container(
                                   width: 303.0,
-                                  height: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.0),
+                                  height: kTeafMetricFieldHeight,
+                                  alignment: Alignment.center,
+                                  decoration: teafMetricFieldShellDecoration(),
                                   child: TextField(
                                     controller: edadController,
-                                    decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context)!
+                                    style: teafMetricTextFieldTextStyle(),
+                                    decoration: teafMetricTextFieldDecoration(
+                                      AppLocalizations.of(context)!
                                           .translate('months')!,
                                     ),
                                     keyboardType: TextInputType.number,
@@ -432,60 +431,44 @@ class _Analisis1UIState extends State<Analisis1UI> {
               SizedBox(height: 20),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: 250,
-                  height: 60,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      String texto = edadController.text;
-                      int? edad = int.tryParse(
-                          texto); // Intenta convertir el texto a un entero
+                child: TeafActionButton(
+                  onPressed: () {
+                    String texto = edadController.text;
+                    int? edad = int.tryParse(
+                        texto); // Intenta convertir el texto a un entero
 
-                      bool camposCompletos = edadController.text.isNotEmpty &&
-                          (botonSi || botonNo);
+                    bool camposCompletos = edadController.text.isNotEmpty &&
+                        (botonSi || botonNo);
 
-                      if (botonSi) {
-                        camposCompletos =
-                            camposCompletos && (botonmayor || botonmenor);
-                      }
-                      if (edad != null && camposCompletos) {
-                        // Si la conversión fue exitosa y se cumplen las condiciones
-                        if (edad >= 24) {
-                          _saveTextFieldsToPrefs();
-                          // Si el tiempo de acogida es menor de 24 meses
-                          if (botonmenor == true && botonSi == true) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Analisis0UI(),
-                              ),
-                            );
-                            return;
-                          }
+                    if (botonSi) {
+                      camposCompletos =
+                          camposCompletos && (botonmayor || botonmenor);
+                    }
+                    if (edad != null && camposCompletos) {
+                      // Si la conversión fue exitosa y se cumplen las condiciones
+                      if (edad >= 24) {
+                        _saveTextFieldsToPrefs();
+                        // Si el tiempo de acogida es menor de 24 meses
+                        if (botonmenor == true && botonSi == true) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Analisis2UI(),
+                              builder: (context) => Analisis0UI(),
                             ),
                           );
-                        } else {
-                          // Manejo si la edad es menor que 24
-                          Fluttertoast.showToast(
-                            msg: AppLocalizations.of(context)!
-                                .translate('higher')!,
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 2,
-                            backgroundColor: Color(0xFF262f36),
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
+                          return;
                         }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Analisis2UI(),
+                          ),
+                        );
                       } else {
-                        // Manejo si la conversión falló o no se cumplen las condiciones
+                        // Manejo si la edad es menor que 24
                         Fluttertoast.showToast(
                           msg: AppLocalizations.of(context)!
-                              .translate('please')!,
+                              .translate('higher')!,
                           toastLength: Toast.LENGTH_LONG,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 2,
@@ -494,27 +477,33 @@ class _Analisis1UIState extends State<Analisis1UI> {
                           fontSize: 16.0,
                         );
                       }
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(Color(0xFF262f36)),
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.white, width: 2.0),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.translate('next')!,
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 25,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
+                    } else {
+                      // Manejo si la conversión falló o no se cumplen las condiciones
+                      Fluttertoast.showToast(
+                        msg: AppLocalizations.of(context)!
+                            .translate('please')!,
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Color(0xFF262f36),
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  },
+                  label: AppLocalizations.of(context)!.translate('next')!,
+                  buttonStyle: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(Color(0xFF262f36)),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
                   ),
+                  textColor: Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 25,
                 ),
               ),
             ],

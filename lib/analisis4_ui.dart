@@ -10,6 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'app_language_provider.dart';
 import 'app_localizations.dart';
+import 'package:teaf_app/teaf_field_styles.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class Analisis4UI extends StatefulWidget {
   @override
@@ -169,23 +171,25 @@ class _Analisis4UIState extends State<Analisis4UI> {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: SizedBox(
-                    width: 310,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              AppLocalizations.of(context)!
-                                  .translate('weight')!,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 0,
+                            Flexible(
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .translate('weight')!,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w500,
+                                  height: 0,
+                                ),
                               ),
                             ),
                             InkWell(
@@ -263,43 +267,36 @@ class _Analisis4UIState extends State<Analisis4UI> {
                         ),
                         Row(
                           children: [
-                            Container(
-                              width: 310.0, // Ancho del rectángulo
-                              height: 30.0, // Alto del rectángulo
-                              decoration: BoxDecoration(
-                                color: Colors
-                                    .grey[300], // Color gris del rectángulo
-                                borderRadius: BorderRadius.circular(
-                                    20.0), // Bordes redondeados
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0), // Espaciado interno
-                              child: TextField(
+                            Expanded(
+                              child: Container(
+                                height: kTeafMetricFieldHeight,
+                                alignment: Alignment.center,
+                                decoration: teafMetricFieldShellDecoration(),
+                                child: TextField(
                                   controller: pesoController,
-                                  decoration: InputDecoration(
-                                    hintText: 'kg',
-                                  ),
-                                  keyboardType: TextInputType
-                                      .number, // Especificar el tipo de teclado como numérico
+                                  style: teafMetricTextFieldTextStyle(),
+                                  decoration: teafMetricTextFieldDecoration('kg'),
+                                  keyboardType: TextInputType.number,
                                   inputFormatters: <TextInputFormatter>[
                                     FilteringTextInputFormatter.digitsOnly,
-                                  ]),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
                         SizedBox(
                           height: 20,
                         ),
-                        SizedBox(
-                          width: 310,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
                                     AppLocalizations.of(context)!
                                         .translate('height')!,
                                     style: TextStyle(
@@ -310,8 +307,9 @@ class _Analisis4UIState extends State<Analisis4UI> {
                                       height: 0,
                                     ),
                                   ),
-                                  InkWell(
-                                    onTap: () {
+                                ),
+                                InkWell(
+                                  onTap: () {
                                       // Mostrar el pop-up al tocar la imagen
                                       showDialog(
                                         context: context,
@@ -369,64 +367,58 @@ class _Analisis4UIState extends State<Analisis4UI> {
                                         },
                                       );
                                     },
-                                    child: Container(
-                                      width: 22,
-                                      height: 22,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage('img/pregunta.png'),
-                                          fit: BoxFit.cover,
-                                        ),
+                                  child: Container(
+                                    width: 22,
+                                    height: 22,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image:
+                                            AssetImage('img/pregunta.png'),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
                         ),
                         Row(
                           children: [
-                            Container(
-                              width: 310.0, // Ancho del rectángulo
-                              height: 30.0, // Alto del rectángulo
-                              decoration: BoxDecoration(
-                                color: Colors
-                                    .grey[300], // Color gris del rectángulo
-                                borderRadius: BorderRadius.circular(
-                                    20.0), // Bordes redondeados
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0), // Espaciado interno
-                              child: TextField(
+                            Expanded(
+                              child: Container(
+                                height: kTeafMetricFieldHeight,
+                                alignment: Alignment.center,
+                                decoration: teafMetricFieldShellDecoration(),
+                                child: TextField(
                                   controller: tallaController,
-                                  decoration: InputDecoration(
-                                    hintText: 'cm',
-                                  ),
-                                  keyboardType: TextInputType
-                                      .number, // Especificar el tipo de teclado como numérico
+                                  style: teafMetricTextFieldTextStyle(),
+                                  decoration:
+                                      teafMetricTextFieldDecoration('cm'),
+                                  keyboardType: TextInputType.number,
                                   inputFormatters: <TextInputFormatter>[
                                     FilteringTextInputFormatter.digitsOnly,
-                                  ]),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
                         SizedBox(
                           height: 20,
                         ),
-                        SizedBox(
-                          width: 310,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
                                     AppLocalizations.of(context)!
                                         .translate('head_circumference')!,
                                     style: TextStyle(
@@ -437,8 +429,9 @@ class _Analisis4UIState extends State<Analisis4UI> {
                                       height: 0,
                                     ),
                                   ),
-                                  InkWell(
-                                    onTap: () {
+                                ),
+                                InkWell(
+                                  onTap: () {
                                       // Mostrar el pop-up al tocar la imagen
                                       showDialog(
                                         context: context,
@@ -497,48 +490,42 @@ class _Analisis4UIState extends State<Analisis4UI> {
                                         },
                                       );
                                     },
-                                    child: Container(
-                                      width: 22,
-                                      height: 22,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage('img/pregunta.png'),
-                                          fit: BoxFit.cover,
-                                        ),
+                                  child: Container(
+                                    width: 22,
+                                    height: 22,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image:
+                                            AssetImage('img/pregunta.png'),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
                         ),
                         Row(
                           children: [
-                            Container(
-                              width: 310.0, // Ancho del rectángulo
-                              height: 30.0, // Alto del rectángulo
-                              decoration: BoxDecoration(
-                                color: Colors
-                                    .grey[300], // Color gris del rectángulo
-                                borderRadius: BorderRadius.circular(
-                                    20.0), // Bordes redondeados
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0), // Espaciado interno
-                              child: TextField(
-                                controller: perimetroCranealController,
-                                decoration: InputDecoration(
-                                  hintText: 'cm',
+                            Expanded(
+                              child: Container(
+                                height: kTeafMetricFieldHeight,
+                                alignment: Alignment.center,
+                                decoration: teafMetricFieldShellDecoration(),
+                                child: TextField(
+                                  controller: perimetroCranealController,
+                                  style: teafMetricTextFieldTextStyle(),
+                                  decoration:
+                                      teafMetricTextFieldDecoration('cm'),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                                 ),
-                                keyboardType: TextInputType
-                                    .number, // Especificar el tipo de teclado como numérico
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
                               ),
                             ),
                           ],
@@ -546,16 +533,15 @@ class _Analisis4UIState extends State<Analisis4UI> {
                         SizedBox(
                           height: 20,
                         ),
-                        SizedBox(
-                          width: 310,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
                                     AppLocalizations.of(context)!
                                         .translate('palpebral_distance')!,
                                     style: TextStyle(
@@ -566,8 +552,9 @@ class _Analisis4UIState extends State<Analisis4UI> {
                                       height: 0,
                                     ),
                                   ),
-                                  InkWell(
-                                    onTap: () {
+                                ),
+                                InkWell(
+                                  onTap: () {
                                       // Mostrar el pop-up al tocar la imagen
                                       showDialog(
                                         context: context,
@@ -626,48 +613,43 @@ class _Analisis4UIState extends State<Analisis4UI> {
                                         },
                                       );
                                     },
-                                    child: Container(
-                                      width: 22,
-                                      height: 22,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage('img/pregunta.png'),
-                                          fit: BoxFit.cover,
-                                        ),
+                                  child: Container(
+                                    width: 22,
+                                    height: 22,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image:
+                                            AssetImage('img/pregunta.png'),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
                         ),
                         Row(
                           children: [
-                            Container(
-                              width: 310.0, // Ancho del rectángulo
-                              height: 30.0, // Alto del rectángulo
-                              decoration: BoxDecoration(
-                                color: Colors
-                                    .grey[300], // Color gris del rectángulo
-                                borderRadius: BorderRadius.circular(
-                                    20.0), // Bordes redondeados
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0), // Espaciado interno
-                              child: TextField(
+                            Expanded(
+                              child: Container(
+                                height: kTeafMetricFieldHeight,
+                                alignment: Alignment.center,
+                                decoration: teafMetricFieldShellDecoration(),
+                                child: TextField(
                                   controller: distanciaPalpebralController,
-                                  decoration: InputDecoration(
-                                    hintText: 'mm',
-                                  ),
-                                  keyboardType: TextInputType
-                                      .number, // Especificar el tipo de teclado como numérico
+                                  style: teafMetricTextFieldTextStyle(),
+                                  decoration:
+                                      teafMetricTextFieldDecoration('mm'),
+                                  keyboardType: TextInputType.number,
                                   inputFormatters: <TextInputFormatter>[
                                     FilteringTextInputFormatter.digitsOnly,
-                                  ]),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -681,72 +663,57 @@ class _Analisis4UIState extends State<Analisis4UI> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: 250,
-                  height: 60,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      String edad = await SharedPreferencesHelper.getEdadText();
-                      String generoPaciente =
-                          await SharedPreferencesHelper.getGeneroButtonState()
-                              ? 'Hombre'
-                              : 'Mujer';
-                      int? peso = int.tryParse(pesoController.text);
-                      int? talla = int.tryParse(tallaController.text);
-                      int? percra =
-                          int.tryParse(perimetroCranealController.text);
+                child: TeafActionButton(
+                  onPressed: () async {
+                    String edad = await SharedPreferencesHelper.getEdadText();
+                    String generoPaciente =
+                        await SharedPreferencesHelper.getGeneroButtonState()
+                            ? 'Hombre'
+                            : 'Mujer';
+                    int? peso = int.tryParse(pesoController.text);
+                    int? talla = int.tryParse(tallaController.text);
+                    int? percra =
+                        int.tryParse(perimetroCranealController.text);
 
-                      int? distpal =
-                          int.tryParse(distanciaPalpebralController.text);
-                      bool perimetroValido =
-                          await diagnosticoHelper.verificarPerimetroCraneal(
-                              perimetroCranealController.text,
-                              edad,
-                              generoPaciente);
-                      print(perimetroValido);
-                      // Manejar la acción de Siguiente
-                      if (pesoController.text.isNotEmpty &&
-                          tallaController.text.isNotEmpty &&
-                          perimetroCranealController.text.isNotEmpty &&
-                          distanciaPalpebralController.text.isNotEmpty) {
-                        if (peso! > 0 &&
-                            talla! > 0 &&
-                            percra! > 0 &&
-                            distpal! > 0) {
-                          if (!perimetroValido) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Analisis6UI(),
-                              ),
-                            );
-                            _saveTextFieldsToPrefs();
-                          } else {
-                            print(tallaController.text);
-                            // ignore: use_build_context_synchronously
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Analisis5UI(),
-                              ),
-                            );
-                            _saveTextFieldsToPrefs();
-                          }
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: "Por favor, introduce un valor mayor de 0",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 2,
-                            backgroundColor: Color(0xFF262f36),
-                            textColor: Colors.white,
-                            fontSize: 16.0,
+                    int? distpal =
+                        int.tryParse(distanciaPalpebralController.text);
+                    bool perimetroValido =
+                        await diagnosticoHelper.verificarPerimetroCraneal(
+                            perimetroCranealController.text,
+                            edad,
+                            generoPaciente);
+                    print(perimetroValido);
+                    if (pesoController.text.isNotEmpty &&
+                        tallaController.text.isNotEmpty &&
+                        perimetroCranealController.text.isNotEmpty &&
+                        distanciaPalpebralController.text.isNotEmpty) {
+                      if (peso! > 0 &&
+                          talla! > 0 &&
+                          percra! > 0 &&
+                          distpal! > 0) {
+                        if (!perimetroValido) {
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Analisis6UI(),
+                            ),
                           );
+                          _saveTextFieldsToPrefs();
+                        } else {
+                          print(tallaController.text);
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Analisis5UI(),
+                            ),
+                          );
+                          _saveTextFieldsToPrefs();
                         }
                       } else {
                         Fluttertoast.showToast(
-                          msg: "Por favor, rellene todos los campos",
+                          msg: "Por favor, introduce un valor mayor de 0",
                           toastLength: Toast.LENGTH_LONG,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 2,
@@ -755,27 +722,31 @@ class _Analisis4UIState extends State<Analisis4UI> {
                           fontSize: 16.0,
                         );
                       }
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(Color(0xFF262f36)),
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.white, width: 2.0),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.translate('next')!,
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 25,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "Por favor, rellene todos los campos",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Color(0xFF262f36),
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  },
+                  label: AppLocalizations.of(context)!.translate('next')!,
+                  buttonStyle: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(Color(0xFF262f36)),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
                   ),
+                  textColor: Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 25,
                 ),
               ),
             ],

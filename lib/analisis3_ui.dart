@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'app_language_provider.dart';
 import 'app_localizations.dart';
 import 'diagnostico_helper.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class Analisis3UI extends StatefulWidget {
   @override
@@ -352,52 +353,41 @@ class _Analisis3UIState extends State<Analisis3UI> {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: 250,
-                    height: 60,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if ((botonafro || botoncau) && (botonhom || botonmuj)) {
-                          // Manejar la acción de Atrás
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Analisis4UI(),
-                            ),
-                          );
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: AppLocalizations.of(context)!
-                                .translate('please')!,
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 2,
-                            backgroundColor: Color(0xFF262f36),
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(Color(0xFF262f36)),
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.white, width: 2.0),
-                            borderRadius: BorderRadius.circular(20.0),
+                  child: TeafActionButton(
+                    onPressed: () {
+                      if ((botonafro || botoncau) && (botonhom || botonmuj)) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Analisis4UI(),
                           ),
-                        ),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.translate('next')!,
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 25,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
+                        );
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: AppLocalizations.of(context)!
+                              .translate('please')!,
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 2,
+                          backgroundColor: Color(0xFF262f36),
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
+                    },
+                    label: AppLocalizations.of(context)!.translate('next')!,
+                    buttonStyle: ButtonStyle(
+                      backgroundColor:
+                          WidgetStateProperty.all(Color(0xFF262f36)),
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white, width: 2.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
                     ),
+                    textColor: Color.fromARGB(255, 255, 255, 255),
+                    fontSize: 25,
                   ),
                 ),
               ],

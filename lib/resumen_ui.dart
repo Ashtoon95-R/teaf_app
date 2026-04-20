@@ -10,6 +10,7 @@ import 'app_language_provider.dart';
 import 'app_localizations.dart';
 import 'dialog.dart';
 import 'pdfgenerator.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class SharedPreferencesHelper {
   DiagnosticoHelper diagnosticoHelper = DiagnosticoHelper();
@@ -270,36 +271,26 @@ class ResumenUI extends StatelessWidget {
             SizedBox(
               height: 40,
             ),
-            Container(
-              width: 250,
-              height: 60,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              child: ElevatedButton(
-                onPressed: () {
-                  _launchURL('https://cursoteaf.com/');
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                      Color.fromARGB(255, 182, 223, 255)),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      side: BorderSide(color: Color(0xFF262f36), width: 2.0),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                child: Text(
-                  diagnosticoResult ??
-                      AppLocalizations.of(context)!
-                          .translate('diagnosis_not_available')!,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
+            TeafActionButton(
+              singleLine: false,
+              onPressed: () {
+                _launchURL('https://cursoteaf.com/');
+              },
+              label: diagnosticoResult ??
+                  AppLocalizations.of(context)!
+                      .translate('diagnosis_not_available')!,
+              buttonStyle: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(
+                    Color.fromARGB(255, 182, 223, 255)),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    side: BorderSide(color: Color(0xFF262f36), width: 2.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
               ),
+              textColor: Colors.black,
+              fontSize: 25,
             ),
             SizedBox(
               height: 20,

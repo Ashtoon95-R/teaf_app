@@ -12,6 +12,7 @@ import 'app_language_provider.dart';
 import 'app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'image_popup.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class Analisis5UI extends StatefulWidget {
   @override
@@ -526,65 +527,53 @@ class _Analisis5UIState extends State<Analisis5UI> {
               SizedBox(height: 10),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: 250,
-                  height: 60,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      // Verificar si se ha seleccionado una imagen para Filtrum y Labio superior
-                      if (imagenseleccionadafiltrum != -1 &&
-                          imagenseleccionadalabio != -1) {
-                        //comprobamos el valor de rasgos y dominios
-                        Map<String, int> resultados =
-                            await diagnosticoHelper.rasgosYDominios();
-                        int? rasgos = resultados['rasgos'];
-                        print('rasgos: $rasgos');
-                        int? dominios = resultados['dominios'];
-                        print('dominios: $dominios');
-                        if ((rasgos! >= 2 && dominios == 0) ||
-                            (rasgos < 2 && dominios! < 2)) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Analisis7UI(),
-                            ),
-                          );
-                        } else {
-                          SharedPreferencesHelper.showResumenDialog(context);
-                        }
-                      } else {
-                        Fluttertoast.showToast(
-                          msg: AppLocalizations.of(context)!
-                              .translate('please')!,
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 2,
-                          backgroundColor: Color(0xFF262f36),
-                          textColor: Colors.white,
-                          fontSize: 16.0,
+                child: TeafActionButton(
+                  onPressed: () async {
+                    if (imagenseleccionadafiltrum != -1 &&
+                        imagenseleccionadalabio != -1) {
+                      Map<String, int> resultados =
+                          await diagnosticoHelper.rasgosYDominios();
+                      int? rasgos = resultados['rasgos'];
+                      print('rasgos: $rasgos');
+                      int? dominios = resultados['dominios'];
+                      print('dominios: $dominios');
+                      if ((rasgos! >= 2 && dominios == 0) ||
+                          (rasgos < 2 && dominios! < 2)) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Analisis7UI(),
+                          ),
                         );
+                      } else {
+                        SharedPreferencesHelper.showResumenDialog(context);
                       }
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(Color(0xFF262f36)),
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.white, width: 2.0),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.translate('next')!,
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 25,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: AppLocalizations.of(context)!
+                            .translate('please')!,
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Color(0xFF262f36),
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  },
+                  label: AppLocalizations.of(context)!.translate('next')!,
+                  buttonStyle: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(Color(0xFF262f36)),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
                   ),
+                  textColor: Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 25,
                 ),
               ),
             ],

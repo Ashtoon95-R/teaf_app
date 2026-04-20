@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
+import 'package:teaf_app/teaf_field_styles.dart';
 
 class MyDialog extends StatefulWidget {
   @override
@@ -16,8 +17,11 @@ class _MyDialogState extends State<MyDialog> {
       title: Text(AppLocalizations.of(context)!.translate('introduce')!),
       content: TextField(
         controller: _textEditingController,
-        decoration: InputDecoration(
-            hintText: AppLocalizations.of(context)!.translate('name')!),
+        style: teafMetricTextFieldTextStyle(),
+        decoration: teafDialogTextFieldDecoration(
+          context,
+          AppLocalizations.of(context)!.translate('name')!,
+        ),
       ),
       actions: <Widget>[
         TextButton(

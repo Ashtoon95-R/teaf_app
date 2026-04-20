@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'app_language_provider.dart';
 import 'app_localizations.dart';
 import 'diagnostico_helper.dart';
+import 'package:teaf_app/widgets/teaf_action_button.dart';
 
 class Analisis6UI extends StatefulWidget {
   @override
@@ -354,13 +355,10 @@ class _Analisis6UIState extends State<Analisis6UI> {
               SizedBox(
                 height: 30,
               ),
-              SizedBox(
-                width: 250,
-                height: 60,
-                child: ElevatedButton(
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: TeafActionButton(
                   onPressed: () async {
-                    // Manejar la acción de Siguiente
-
                     if ((botonanomaliasno || botonanomaliassi) &&
                         (botonrecurrenteno || botonrecurrentesi)) {
                       Navigator.push(
@@ -381,7 +379,8 @@ class _Analisis6UIState extends State<Analisis6UI> {
                       );
                     }
                   },
-                  style: ButtonStyle(
+                  label: AppLocalizations.of(context)!.translate('next')!,
+                  buttonStyle: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(Color(0xFF262f36)),
                     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
@@ -390,15 +389,8 @@ class _Analisis6UIState extends State<Analisis6UI> {
                       ),
                     ),
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.translate('next')!,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 25,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  textColor: Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 25,
                 ),
               ),
             ],

@@ -25,6 +25,7 @@ dependencies:
   pdf: ^3.10.8
   printing: ^5.7.2
   flutter_launcher_icons: ^0.13.1
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
